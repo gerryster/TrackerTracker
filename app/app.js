@@ -52,7 +52,7 @@ http.createServer(app).listen(app.get('port'), function () {
   console.log("Express server listening on port " + app.get('port'));
 });
 
--function requireSecure(req, res, next){
+function requireSecure(req, res, next){
   if(!req.secure){
     res.redirect('https://'+req.host+req.originalUrl);
     console.log('redirecting to https://'+req.host+req.originalUrl);
@@ -60,7 +60,7 @@ http.createServer(app).listen(app.get('port'), function () {
     next();
   };
 }
--
+
 // place before any other route to ensure all requests https
 app.all('*', requireSecure);
 
