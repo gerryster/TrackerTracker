@@ -51,3 +51,23 @@ app.get('/getTeamcityBuildStatus', routes.hasToken, routes.getTeamcityBuildStatu
 http.createServer(app).listen(app.get('port'), function () {
   console.log("Express server listening on port " + app.get('port'));
 });
+
+function requireSecure(req, res, next){
+  if(!req.secure){
+    var port = app.myConfig.httpsPort || 443;
+    if(port != 443){
+      res.redirect('https://'+req.host+':'+port+req.originalUrl);
+      console.log('redirecting to https://'+req.host+':'+port+req.originalUrl);
+    } else {
+      res.redirect('https://'+req.host+req.originalUrl);
+      console.log('redirecting to https://'+req.host+req.originalUrl);
+    };
+  } else {
+    next();
+  };
+}
+-
+// place before any other route to ensure all requests https
+app.all('*', requireSecure);
+
+
